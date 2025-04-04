@@ -1,0 +1,6 @@
+.env*
+*.swp
+*.bak
+*.original
+custom.yml
+serviceaccounts/*.json

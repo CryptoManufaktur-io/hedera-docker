@@ -1,0 +1,32 @@
+services:
+  api-proxy:
+    ports:
+      - ${API_PROXY_PORT:-8080}:8080
+
+  graphql:
+    ports:
+      - ${GRAPHQL_PORT:-8083}:8083
+
+  grpc:
+    ports:
+      - ${GRPC_PORT:-5600}:5600
+
+  redis:
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+
+  rest:
+    ports:
+      - ${REST_PORT:-5551}:5551
+
+  rest-java:
+    ports:
+      - ${REST_JAVA_PORT:-8084}:8084
+
+  rosetta:
+    ports:
+      - ${ROSETTA_PORT:-5700}:5700
+
+  web3:
+    ports:
+      - ${WEB3_PORT:-8545}:8545
