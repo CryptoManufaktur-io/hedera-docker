@@ -70,7 +70,7 @@ if [ -f "/data/bootstrap_discrepancies.log" ]; then
         echo "Re-downloading $relative_path ..."
 
         # Download the file
-        gcloud storage cp "$remote_path" "$local_path"
+        gcloud storage cp --billing-project="$PROJECT_ID" "$remote_path" "$local_path"
     done < /data/bootstrap_discrepancies.log
 
     rm -f /data/bootstrap_discrepancies.log
