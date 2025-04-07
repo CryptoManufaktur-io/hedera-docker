@@ -210,10 +210,26 @@ configs:
     content: |
       hedera:
         mirror:
+          grpc:
+            db:
+              password:  "postgres_password"
+          rest:
+            db:
+              password:  "postgres_password"
+          restJava:
+            db:
+              password:  "postgres_password"
+          rosetta:
+            db:
+              password:  "postgres_password"
+          web3:
+            db:
+              password:  "postgres_password"
           importer:
             db:
-              username: mirror_node
-              password:  postgres_password
+              ownerPassword:  "postgres_password"
+              password:  "postgres_password"
+              restPassword: "postgres_password"
             downloader:
               accessKey: ${ACCESS_KEY}
               cloudProvider: "GCP"
