@@ -211,12 +211,26 @@ configs:
       hedera:
         mirror:
           importer:
-            network: ${NETWORK}
+            db:
+              username: mirror_node
+              password:  mirror_node_pass
             downloader:
               accessKey: ${ACCESS_KEY}
               cloudProvider: "GCP"
               gcpProjectId: ${PROJECT_ID}
               secretKey: ${SECRET_KEY}
+            network: ${NETWORK}
+            parser:
+              record:
+                frequency: 10       # Increases sync speed, rm after sync to use default values
+                queueCapacity: 40   # Increases sync speed, rm after sync to use default values
+                sidecar:
+                  enabled: true
+                entity:
+                  persist:
+                    topics: false
+              exclude:
+                - transaction: [CONSENSUSSUBMITMESSAGE] # Excludes HCS related state saving multiple TBs per month
 
   proxy-config:
     content: |
