@@ -213,7 +213,7 @@ configs:
           importer:
             db:
               username: mirror_node
-              password:  mirror_node_pass
+              password:  postgres_password
             downloader:
               accessKey: ${ACCESS_KEY}
               cloudProvider: "GCP"
