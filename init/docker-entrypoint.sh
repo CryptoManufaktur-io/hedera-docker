@@ -58,6 +58,9 @@ if [ -f "/data/bootstrap_discrepancies.log" ]; then
     gcloud_login
 
     while IFS= read -r line; do
+        # Skip empty lines or lines without a colon
+        [[ -z "$line" || "$line" != *:* ]] && continue
+
         # Extract path by stripping before the colon
         local_path="${line%%:*}"
 
@@ -67,7 +70,25 @@ if [ -f "/data/bootstrap_discrepancies.log" ]; then
         # Construct the remote path
         remote_path="$BUCKET_PATH/$relative_path"
 
-        rm "$local_path"
+        # Remove from DB
+        absolute_file="$(realpath "$local_path")"
+        filename=$(basename "$absolute_file")
+        if [[ ! "$filename" =~ ^(.+)_part_ ]]; then
+            table=$(basename "$local_path" .csv.gz)
+            sql_command="DELETE FROM $table;"
+        else
+            table="${filename%%_part_*}"
+            part_suffix="${filename#*_part_}"
+            start_ts=$(echo "$part_suffix" | cut -d'_' -f2)
+            end_ts=$(echo "$part_suffix" | cut -d'_' -f3)
+            sql_command="DELETE FROM $table WHERE consensus_timestamp BETWEEN '$start_ts' AND '$end_ts';"
+        fi
+        echo "Trying to delete records from DB"
+        echo "$sql_command"
+        export PGPASSWORD='postgres_password'
+        psql -h db -U postgres -d mirror_node -v ON_ERROR_STOP=1 -q -Atc "$sql_command"
+
+        rm -f "$local_path"
         echo "Re-downloading $relative_path ..."
 
         # Download the file
