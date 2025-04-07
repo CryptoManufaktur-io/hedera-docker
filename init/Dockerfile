@@ -7,7 +7,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY bootstrap.sh /data/bootstrap.sh
 COPY bootstrap.env /data/bootstrap.env
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y postgresql-client curl apt-transport-https ca-certificates gnupg && python3 -m pip install rapidgzip  \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y postgresql-client curl apt-transport-https ca-certificates gnupg nano && python3 -m pip install rapidgzip  \
         && rm -rf /var/lib/apt/lists/*
 
 # Install b3sum
