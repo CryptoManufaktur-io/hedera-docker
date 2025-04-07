@@ -67,6 +67,7 @@ if [ -f "/data/bootstrap_discrepancies.log" ]; then
         # Construct the remote path
         remote_path="$BUCKET_PATH/$relative_path"
 
+        rm "$local_path"
         echo "Re-downloading $relative_path ..."
 
         # Download the file
