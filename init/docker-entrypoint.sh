@@ -26,12 +26,15 @@ if [ -z "$PROJECT_ID" ]; then
     exit 1
 fi
 
+gcloud_login() {
+    gcloud auth activate-service-account --key-file=/serviceaccounts/"$SERVICE_ACCOUNT_FILE"
+    gcloud storage ls gs://mirrornode-db-export/ --billing-project="$PROJECT_ID"
+}
+
 # ---------- Download snapshot files from GCP ---------------------------
 if [ ! -f "/data/snapshot_downloaded" ]; then
     echo "Downloading Minimal DB Data Files from GCP"
-
-    gcloud auth activate-service-account --key-file=/serviceaccounts/"$SERVICE_ACCOUNT_FILE"
-    gcloud storage ls gs://mirrornode-db-export/ --billing-project="$PROJECT_ID"
+    gcloud_login
 
     mkdir -p /data/download
     export CLOUDSDK_STORAGE_SLICED_OBJECT_DOWNLOAD_MAX_COMPONENTS=1
@@ -46,6 +49,34 @@ else
     echo "Snapshot files already downloaded"
 fi
 # ---------- Download snapshot files from GCP ---------------------------
+
+# ---------- Redownload discrepancies files ---------------------------
+if [ -f "/data/bootstrap_discrepancies.log" ]; then
+    echo "Redownloading Files from GCP that have discrepancies"
+    BUCKET_PATH="gs://mirrornode-db-export/$SNAPSHOT_VERSION"
+    LOCAL_BASE="/data/download"
+
+    while IFS= read -r line; do
+        # Extract path by stripping before the colon
+        local_path="${line%%:*}"
+
+        # Remove /data/download/ prefix
+        relative_path="${local_path#"$LOCAL_BASE/"}"
+
+        # Construct the remote path
+        remote_path="$BUCKET_PATH/$relative_path"
+
+        echo "Re-downloading $relative_path ..."
+
+        # Download the file
+        gcloud storage cp "$remote_path" "$local_path"
+    done < /data/bootstrap_discrepancies.log
+
+    rm -f /data/bootstrap_discrepancies.log
+    echo "Done redownloading Files from GCP that have discrepancies"
+fi
+# ---------- Redownload discrepancies files ---------------------------
+
 
 tail_log() {
     tail -f "$BG_LOG_FILE"
