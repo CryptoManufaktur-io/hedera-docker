@@ -58,7 +58,7 @@ tail_log() {
 }
 
 run_bootstrap_script() {
-  bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
+  ./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
   called_script_exit_code=$?
   return $called_script_exit_code
 }
