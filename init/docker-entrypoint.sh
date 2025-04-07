@@ -57,14 +57,30 @@ tail_log() {
     tail -f "$BG_LOG_FILE"
 }
 
+run_bootstrap_script() {
+  bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
+  called_script_exit_code=$?
+  return $called_script_exit_code
+}
+
 # Start tailing the log in the background
 tail_log &
 tail_pid=$!
 
 echo "Running bootstrap script (tail PID: $tail_pid) ..."
+run_bootstrap_script
+exit_code=$?
 
-./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
+# If import command finishes, kill the tail process
+ if [ "$exit_code" -eq 0 ]; then
+     kill "$tail_pid"
+     wait "$tail_pid"
+ else
+     echo "Bootstrap script import process failed."
+     kill "$tail_pid"
+     wait "$tail_pid"
+     exit 1
+ fi
 
-kill "$tail_pid"
 echo "Done running bootstrap script"
 exit 0
