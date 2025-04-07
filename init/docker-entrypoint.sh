@@ -55,6 +55,7 @@ if [ -f "/data/bootstrap_discrepancies.log" ]; then
     echo "Redownloading Files from GCP that have discrepancies"
     BUCKET_PATH="gs://mirrornode-db-export/$SNAPSHOT_VERSION"
     LOCAL_BASE="/data/download"
+    gcloud_login
 
     while IFS= read -r line; do
         # Extract path by stripping before the colon
