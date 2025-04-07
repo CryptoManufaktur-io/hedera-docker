@@ -4,7 +4,7 @@ Docker Compose for Hedera
 
 ## Snapshot Downloading from GCP bucket
 
-You need a service account with `Service Usage Consumer` role to be able to download the snapshot. 
+You need a service account with `Service Usage Consumer` role to be able to download the snapshot.
 
 Download `serviceaccount.json` file and place it inside `./serviceaccounts` folder then edit the name of the variable `SERVICE_ACCOUNT_FILE` in `.env` to match.
 
