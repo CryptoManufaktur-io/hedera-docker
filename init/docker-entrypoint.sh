@@ -63,22 +63,20 @@ tail_pid=$!
 
 echo "Running bootstrap script (tail PID: $tail_pid) ..."
 
-set +e  # Disable 'exit'
-./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download
-set -e  # Re-enable it
-
-# If import command finishes, kill the tail process
+set +e
+(
+  ./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
+)
 exit_code=$?
- if [ "$exit_code" -eq 0 ]; then
-     kill "$tail_pid"
-     wait "$tail_pid"
- else
-     echo "Bootstrap script import process failed."
-     kill "$tail_pid"
-     wait "$tail_pid"
-     exit 1
- fi
+set -e
 
 kill "$tail_pid"
-echo "Done running bootstrap script"
-exit 0
+wait "$tail_pid"
+
+if [ "$exit_code" -eq 0 ]; then
+    echo "Done running bootstrap script"
+    exit 0
+else
+    echo "Bootstrap script import process failed."
+    exit 1
+fi
