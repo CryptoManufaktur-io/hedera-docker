@@ -1,6 +1,6 @@
 services:
   hedera-init:
-    restart: "no"
+    restart: "on-failure"
     build:
       context: ./init
       dockerfile: Dockerfile

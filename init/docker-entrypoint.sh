@@ -47,36 +47,20 @@ else
 fi
 # ---------- Download snapshot files from GCP ---------------------------
 
-
-BG_LOG_FILE="/data/bootstrap.log"
-if [ ! -f "$BG_LOG_FILE" ]; then
-    echo "" >> "$BG_LOG_FILE"
-fi
-
 tail_log() {
     tail -f "$BG_LOG_FILE"
 }
 
-# Start tailing the log in the background
-tail_log &
-tail_pid=$!
-
-echo "Running bootstrap script (tail PID: $tail_pid) ..."
-
-set +e
-(
-  ./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
-)
-exit_code=$?
-set -e
-
-kill "$tail_pid"
-wait "$tail_pid"
-
-if [ "$exit_code" -eq 0 ]; then
+BG_LOG_FILE="/data/bootstrap.log"
+if [ -f "$BG_LOG_FILE" ] && grep -q "DB import completed successfully" "$BG_LOG_FILE"; then
     echo "Done running bootstrap script"
     exit 0
 else
-    echo "Bootstrap script import process failed."
-    exit 1
+    # Start tailing the log in the background
+    tail_log &
+    tail_pid=$!
+
+    echo "Running bootstrap script (tail PID: $tail_pid) ..."
+    echo "" >> "$BG_LOG_FILE"
+    ./bootstrap.sh "$SNAPSHOT_CPU_CORES" /data/download > /dev/null 2>> bootstrap.log
 fi
