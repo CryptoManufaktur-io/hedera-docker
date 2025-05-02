@@ -46,6 +46,7 @@ if [ ! -f "/data/snapshot_downloaded" ]; then
 
     echo "Done downloading minimal DB Data Files"
 else
+    rm -rf /data/download/*
     echo "Snapshot files already downloaded"
 fi
 # ---------- Download snapshot files from GCP ---------------------------
