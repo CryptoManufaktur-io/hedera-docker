@@ -108,6 +108,7 @@ tail_log() {
 BG_LOG_FILE="/data/bootstrap.log"
 if [ -f "$BG_LOG_FILE" ] && grep -q "DB import completed successfully" "$BG_LOG_FILE"; then
     echo "Done running bootstrap script"
+    rm -rf /data/download/*
     exit 0
 else
     # Start tailing the log in the background

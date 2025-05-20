@@ -11,9 +11,9 @@ services:
     ports:
       - ${GRPC_PORT:-5600}:5600
 
-  redis:
-    ports:
-      - ${REDIS_PORT:-6379}:6379
+  # redis:
+  #   ports:
+  #     - ${REDIS_PORT:-6379}:6379
 
   rest:
     ports:
