@@ -1,0 +1,13 @@
+services:
+  relay:
+    ports:
+      - ${RELAY_PORT:-7546}:7546
+
+  relay-ws:
+    ports:
+      - ${RELAY_WS_PORT:-8546}:8546
+      - ${RELAY_WS_HEALTHCHECK_PORT:-8547}:8547
+
+  # relay-redis:
+  #   ports:
+  #     - ${RELAY_REDIS_PORT:-6379}:6379
