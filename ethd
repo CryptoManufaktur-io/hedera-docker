@@ -76,6 +76,24 @@ version() {
   esac
 }
 
+status() {
+  __NETWORK_NAME=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}' hedera-relay-1)
+
+  echo "****************** Relay eth_chainId ******************"
+  docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":"2","method":"eth_chainId","params":[null]}' http://relay:7546
+
+  echo -e "\n\n\n****************** Relay eth_gasPrice ******************"
+  docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":"2","method":"eth_gasPrice","params":[null]}' http://relay:7546
+
+  echo -e "\n\n\n****************** Relay eth_getBlockByNumber ******************"
+  docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getBlockByNumber", "params": ["0x41CDC3B", false],"id":1}' http://relay:7546
+
+  echo -e "\n\n\n****************** Relay eth_getLogs ******************"
+  docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"blockHash": "0xf8fa1ce1a8cb6f00c6df93b64d6d402bb68691f2e4ea65dbbb646f1ffd423047"}],"id":1}' http://relay:7546
+
+  echo -e "\n\n\n****************** RPC eth_call ******************"
+  docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0x00000000000000000000000000000000002cc823", "data":"0x313ce567"}, "latest"],"id":1}' http://relay:7546
+}
 
 __prep_conffiles() {
   # Adjust - this is where sample files would be copied to config files that are meant to be bind-mounted
@@ -1033,6 +1051,8 @@ __full_help() {
   echo "    stops the ${__app_name} and destroys all data stores"
   echo "  space"
   echo "    show Docker volume space usage"
+  echo "  status"
+  echo "    show status of hedera by calling endpoints using curl"
   echo "  help"
   echo "    print this help screen"
   echo
@@ -1129,7 +1149,7 @@ if ! __docompose --help >/dev/null 2>&1; then
 fi
 
 case "$__command" in
-  help|update|up|start|down|stop|restart|version|logs|cmd|terminate|space)
+  help|update|up|start|down|stop|restart|version|logs|cmd|terminate|space|status)
     $__command "$@";;
   *)
     echo "Unrecognized command $__command"
