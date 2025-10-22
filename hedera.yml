@@ -216,6 +216,8 @@ services:
     environment:
       HEDERA_MIRROR_WEB3_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hedera/
+      HIERO_MIRROR_WEB3_EVM_MODULARIZEDSERVICES: false
+      HIERO_MIRROR_WEB3_EVM_MODULARIZEDTRAFFICPERCENT: 0
     image: gcr.io/mirrornode/hedera-mirror-web3:${HEDERA_VERSION}
     pull_policy: always
     restart: unless-stopped
