@@ -155,13 +155,14 @@ services:
     <<: *logging
 
   rest:
-    configs:
-      - source: ${CONFIG_NAME}
-        target: /usr/etc/hiero/application.yml
-        mode: 0444
+    # configs:
+    #   - source: ${CONFIG_NAME}
+    #     target: /usr/etc/hiero/application.yml
+    #     mode: 0444
     environment:
-      CONFIG_PATH: /usr/etc/hiero/
+      # CONFIG_PATH: /usr/etc/hiero/
       HIERO_MIRROR_REST_DB_HOST: db
+      HIERO_MIRROR_REST_DB_PASSWORD: postgres_password
       HIERO_MIRROR_REST_REDIS_URI: redis://redis:6379
     image: gcr.io/mirrornode/hedera-mirror-rest:${HEDERA_VERSION}
     pull_policy: always
