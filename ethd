@@ -93,6 +93,9 @@ status() {
 
   echo -e "\n\n\n****************** RPC eth_call ******************"
   docker run --network="$__NETWORK_NAME" --rm alpine/curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0x00000000000000000000000000000000002cc823", "data":"0x313ce567"}, "latest"],"id":1}' http://relay:7546
+
+  echo -e ""
+  echo -e ""
 }
 
 __prep_conffiles() {

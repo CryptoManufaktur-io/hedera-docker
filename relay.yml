@@ -12,6 +12,13 @@ services:
     restart: "unless-stopped"
     pull_policy: always
     tty: true
+    healthcheck:
+      disable: true
+      # test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/7546; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
+      # interval: 30s
+      # timeout: 10s
+      # start_period: 15s
+      # retries: 3
     environment:
       REDIS_ENABLED: true
       REDIS_URL: "redis://relay-redis:6379"
@@ -51,6 +58,13 @@ services:
   relay-ws:
     image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:${RELAY_VERSION}
     command: start:ws
+    healthcheck:
+      disable: true
+      # test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/8547; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
+      # interval: 30s
+      # timeout: 10s
+      # start_period: 15s
+      # retries: 3
     environment:
       HEALTHCHECK_PORT: 8547
 
