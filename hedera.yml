@@ -228,7 +228,7 @@ services:
 configs:
   app-config-gcp:
     content: |
-      hiero:
+      hedera:
         mirror:
           grpc:
             db:
