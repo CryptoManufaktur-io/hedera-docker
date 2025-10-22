@@ -13,7 +13,7 @@ services:
     pull_policy: always
     tty: true
     healthcheck:
-      test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/${HEALTHCHECK_PORT}; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
+      test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/7546; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
       interval: 30s
       timeout: 10s
       start_period: 15s
@@ -58,7 +58,7 @@ services:
     image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:${RELAY_VERSION}
     command: start:ws
     healthcheck:
-      test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/${HEALTHCHECK_PORT}; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
+      test: ["CMD", "bash", "-c", "timeout 5 bash -c 'exec 3<>/dev/tcp/localhost/8547; printf \"GET /health/liveness HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q 200 <&3'"]
       interval: 30s
       timeout: 10s
       start_period: 15s
