@@ -79,7 +79,7 @@ services:
     deploy:
       replicas: 0
     environment:
-      HEDERA_MIRROR_GRAPHQL_DB_HOST: db
+      HIERO_MIRROR_GRAPHQL_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
     image: gcr.io/mirrornode/hedera-mirror-graphql:${HEDERA_VERSION}
     pull_policy: always
@@ -96,7 +96,7 @@ services:
         target: /usr/etc/hiero/application.yml
         mode: 0444
     environment:
-      HEDERA_MIRROR_GRPC_DB_HOST: db
+      HIERO_MIRROR_GRPC_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
       SPRING_DATA_REDIS_HOST: redis
     image: gcr.io/mirrornode/hedera-mirror-grpc:${HEDERA_VERSION}
@@ -114,7 +114,11 @@ services:
         target: /usr/etc/hiero/application.yml
         mode: 0444
     environment:
-      HEDERA_MIRROR_IMPORTER_DB_HOST: db
+      HIERO_MIRROR_IMPORTER_DB_HOST: db
+      HIERO_MIRROR_IMPORTER_DOWNLOADER_CLOUDPROVIDER: GCP
+      HIERO_MIRROR_IMPORTER_DOWNLOADER_GCPPROJECTID: ${PROJECT_ID}
+      HIERO_MIRROR_IMPORTER_DOWNLOADER_SECRETKEY: ${SECRET_KEY}
+      HIERO_MIRROR_IMPORTER_DOWNLOADER_ACCESSKEY: ${ACCESS_KEY}
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
       SPRING_DATA_REDIS_HOST: redis
     image: gcr.io/mirrornode/hedera-mirror-importer:${HEDERA_VERSION}
@@ -161,8 +165,8 @@ services:
         mode: 0444
     environment:
       CONFIG_PATH: /usr/etc/hiero/
-      HEDERA_MIRROR_REST_DB_HOST: db
-      HEDERA_MIRROR_REST_REDIS_URI: redis://redis:6379
+      HIERO_MIRROR_REST_DB_HOST: db
+      HIERO_MIRROR_REST_REDIS_URI: redis://redis:6379
     image: gcr.io/mirrornode/hedera-mirror-rest:${HEDERA_VERSION}
     pull_policy: always
     restart: unless-stopped
@@ -178,7 +182,7 @@ services:
         target: /usr/etc/hiero/application.yml
         mode: 0444
     environment:
-      HEDERA_MIRROR_RESTJAVA_DB_HOST: db
+      HIERO_MIRROR_RESTJAVA_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
     image: gcr.io/mirrornode/hedera-mirror-rest-java:${HEDERA_VERSION}
     pull_policy: always
@@ -197,8 +201,8 @@ services:
     deploy:
       replicas: 0
     environment:
-      HEDERA_MIRROR_ROSETTA_API_CONFIG: /usr/etc/hiero/application.yml
-      HEDERA_MIRROR_ROSETTA_DB_HOST: db
+      HIERO_MIRROR_ROSETTA_API_CONFIG: /usr/etc/hiero/application.yml
+      HIERO_MIRROR_ROSETTA_DB_HOST: db
     image: gcr.io/mirrornode/hedera-mirror-rosetta:${HEDERA_VERSION}
     pull_policy: always
     restart: unless-stopped
@@ -214,7 +218,7 @@ services:
         target: /usr/etc/hiero/application.yml
         mode: 0444
     environment:
-      HEDERA_MIRROR_WEB3_DB_HOST: db
+      HIERO_MIRROR_WEB3_DB_HOST: db
       SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
       HIERO_MIRROR_WEB3_EVM_MODULARIZEDSERVICES: false
       HIERO_MIRROR_WEB3_EVM_MODULARIZEDTRAFFICPERCENT: 0
