@@ -36,7 +36,6 @@ if [[ "${SCHEMA_V2}" == "true" ]]; then
                              grant temporary on database :dbName to :ownerUsername;
                              alter type timestamptz owner to :ownerUsername;
                              "
-  DB_SPECIFIC_MIRROR_IMPORTER_ROLE_ADMIN=
 fi
 
 if [[ "${SCHEMA_V2}" == "true" || "${CREATE_MIRROR_API_USER}" == "true" ]]; then
