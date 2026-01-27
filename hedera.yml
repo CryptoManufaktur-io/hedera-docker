@@ -248,6 +248,8 @@ configs:
           web3:
             db:
               password:  "postgres_password"
+            evm:
+              validatePayerBalance: false
           importer:
             db:
               ownerPassword:  "postgres_password"
