@@ -68,7 +68,7 @@ enable_pipefail() {
   set -euo pipefail
 }
 
-# shellcheck disable=SC2329 # Invoked via trap-based cleanup.
+# shellcheck disable=SC2317,SC2329 # Invoked via trap-based cleanup.
 disable_pipefail() {
   set +euo pipefail
 }
@@ -190,7 +190,7 @@ determine_decompression_tool() {
 }
 
 # Recursively terminate a process and all its child processes
-# shellcheck disable=SC2329 # Invoked from cleanup triggered by trap.
+# shellcheck disable=SC2317,SC2329 # Invoked from cleanup triggered by trap.
 kill_descendants() {
   local pid="$1"
   local children
@@ -202,7 +202,7 @@ kill_descendants() {
 }
 
 # Clean up resources and terminate child processes on script exit
-# shellcheck disable=SC2329 # Invoked via trap handler.
+# shellcheck disable=SC2317,SC2329 # Invoked via trap handler.
 cleanup() {
   disable_pipefail
   local trap_type="$1"
