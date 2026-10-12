@@ -64,12 +64,10 @@ declare -a pids=()          # List of background process IDs
 ####################################
 
 # Enable/disable pipefail for error handling
-# shellcheck disable=SC2317,SC2329  # invoked indirectly via trap ... RETURN and export -f
 enable_pipefail() {
   set -euo pipefail
 }
 
-# shellcheck disable=SC2317,SC2329  # invoked indirectly via trap ... RETURN and export -f
 disable_pipefail() {
   set +euo pipefail
 }
@@ -191,7 +189,6 @@ determine_decompression_tool() {
 }
 
 # Recursively terminate a process and all its child processes
-# shellcheck disable=SC2317,SC2329  # invoked from cleanup, which runs via trap
 kill_descendants() {
   local pid="$1"
   local children
@@ -203,7 +200,6 @@ kill_descendants() {
 }
 
 # Clean up resources and terminate child processes on script exit
-# shellcheck disable=SC2317,SC2329  # invoked via trap
 cleanup() {
   disable_pipefail
   local trap_type="$1"
@@ -339,7 +335,6 @@ source_bootstrap_env() {
   if [[ -f "$BOOTSTRAP_ENV_FILE" ]]; then
     log "Sourcing $BOOTSTRAP_ENV_FILE to set environment variables."
     set -a  # Automatically export all variables
-    # shellcheck source=/dev/null
     source "$BOOTSTRAP_ENV_FILE"
     set +a
   else
@@ -533,6 +528,7 @@ import_file() {
   local absolute_file
   local start_ts=""
   local end_ts=""
+  local data_suffix=""
   local current_pid=$BASHPID
 
   # Declare manifest_counts, manifest_sizes, and manifest_hashes as associative arrays
@@ -583,6 +579,7 @@ import_file() {
     part_suffix="${filename#*_part_}"  # Remove everything up to and including _part_
     start_ts=$(echo "$part_suffix" | cut -d'_' -f2)    # Second field after _part_
     end_ts=$(echo "$part_suffix" | cut -d'_' -f3)      # Third field after _part_
+    data_suffix=$(echo "$part_suffix" | cut -d'_' -f4 | cut -d'.' -f1)  # Fourth field, remove extension
   fi
 
   # Log import start and update status
