@@ -107,6 +107,13 @@ services:
       hedera-init:
         condition: service_completed_successfully
     <<: *logging
+    labels:
+      # Prometheus scrape: port is container-internal (not published)
+      - metrics.scrape=true
+      - metrics.path=/actuator/prometheus
+      - metrics.port=8081
+      - metrics.instance=grpc
+      - metrics.network=${NETWORK}
 
   importer:
     configs:
@@ -125,6 +132,12 @@ services:
       hedera-init:
         condition: service_completed_successfully
     <<: *logging
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/actuator/prometheus
+      - metrics.port=8080
+      - metrics.instance=importer
+      - metrics.network=${NETWORK}
 
   monitor:
     configs:
@@ -172,6 +185,12 @@ services:
       hedera-init:
         condition: service_completed_successfully
     <<: *logging
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/swagger/metrics/
+      - metrics.port=5551
+      - metrics.instance=rest
+      - metrics.network=${NETWORK}
 
   rest-java:
     configs:
@@ -189,6 +208,12 @@ services:
       hedera-init:
         condition: service_completed_successfully
     <<: *logging
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/actuator/prometheus
+      - metrics.port=8084
+      - metrics.instance=rest-java
+      - metrics.network=${NETWORK}
 
   rosetta:
     configs:
@@ -227,6 +252,12 @@ services:
       hedera-init:
         condition: service_completed_successfully
     <<: *logging
+    labels:
+      - metrics.scrape=true
+      - metrics.path=/actuator/prometheus
+      - metrics.port=8545
+      - metrics.instance=web3
+      - metrics.network=${NETWORK}
 
 configs:
   app-config-gcp:
