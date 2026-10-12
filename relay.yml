@@ -54,6 +54,12 @@ services:
       - traefik.http.routers.${RPC_HOST:-hedera}lb.rule=Host(`${RPC_LB:-hedera-lb}.${DOMAIN}`)
       - traefik.http.routers.${RPC_HOST:-hedera}lb.tls.certresolver=letsencrypt
       - traefik.http.services.${RPC_HOST:-hedera}.loadbalancer.server.port=${RELAY_PORT:-7546}
+      # Prometheus scrape: container-internal port, not published
+      - metrics.scrape=true
+      - metrics.path=/metrics
+      - metrics.port=7546
+      - metrics.instance=relay
+      - metrics.network=${NETWORK}
 
   relay-ws:
     image: ghcr.io/hiero-ledger/hiero-json-rpc-relay:${RELAY_VERSION}
@@ -110,6 +116,12 @@ services:
       - traefik.http.routers.${WS_HOST:-hederaws}lb.rule=Host(`${WS_LB:-hederaws-lb}.${DOMAIN}`)
       - traefik.http.routers.${WS_HOST:-hederaws}lb.tls.certresolver=letsencrypt
       - traefik.http.services.${WS_HOST:-hederaws}.loadbalancer.server.port=${RELAY_WS_PORT:-8546}
+      # Prometheus scrape: relay-ws serves /metrics on HEALTHCHECK_PORT (8547), not the websocket port
+      - metrics.scrape=true
+      - metrics.path=/metrics
+      - metrics.port=8547
+      - metrics.instance=relay-ws
+      - metrics.network=${NETWORK}
 
   relay-redis:
     image: redis@sha256:9c6bb76658f8e6f7ca8d0d96c8fcdfb12e9795579c89918aea4fa2ad9817c2f0 # 8.0-M04-bookworm
