@@ -36,6 +36,7 @@ if [[ "${SCHEMA_V2}" == "true" ]]; then
                              grant temporary on database :dbName to :ownerUsername;
                              alter type timestamptz owner to :ownerUsername;
                              "
+  # shellcheck disable=SC2034  # unused; not the variable the SQL below reads (DB_SPECIFIC_IMPORTER_ROLE_ADMIN), left as is to not change init behavior
   DB_SPECIFIC_MIRROR_IMPORTER_ROLE_ADMIN=
 fi
 
