@@ -16,6 +16,8 @@ repos:
   rev: 3.0.0
   hooks:
   - id: shellcheck
+    # Scripts provided by the Hedera team; kept as shipped, so not linted here
+    exclude: ^(db/init\.sh|init/bootstrap\.sh)$
   - id: script-must-have-extension
   - id: git-dirty
   - id: git-check
