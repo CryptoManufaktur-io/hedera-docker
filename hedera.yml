@@ -69,6 +69,20 @@ services:
     depends_on:
       hedera-init:
         condition: service_completed_successfully
+      # nginx resolves the upstream names once, when it starts. Restart the proxy whenever one of
+      # these services is recreated so it does not keep returning 502 for their old addresses.
+      grpc:
+        condition: service_started
+        restart: true
+      rest:
+        condition: service_started
+        restart: true
+      rest-java:
+        condition: service_started
+        restart: true
+      web3:
+        condition: service_started
+        restart: true
     <<: *logging
 
   graphql:
